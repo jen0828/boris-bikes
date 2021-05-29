@@ -16,4 +16,14 @@ class DockingStation
     fail 'No bikes available' if @bikes.empty?
     @bike.pop
   end
+
+  private
+
+  def full?
+    @bikes.count >= 20
+  end
+
+  def empty?
+    @bikes.empty?
+  end
 end
