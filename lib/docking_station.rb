@@ -17,7 +17,7 @@ class DockingStation
 
   def release_bike
     fail 'No bikes available' if empty?
-    bike.pop
+    bikes.pop
   end
 
   private
