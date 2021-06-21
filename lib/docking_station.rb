@@ -17,7 +17,14 @@ class DockingStation
 
   def release_bike
     fail 'No bikes available' if empty?
-    bikes.pop
+    bikes.each_with_index {|bike,i| return bikes.delete_at(i) if bike.working?}
+    fail 'No working bikes available'
+  end
+
+  def dispatch_broken_bikes
+    broken_bikes = []
+    bikes.each.with_index {|bike,i| broken_bikes << bikes.delete_at(i) unless bike.working?}
+    broken_bikes
   end
 
   private

@@ -1,7 +1,16 @@
 require 'docking_station'
+require 'bike'
 
 describe DockingStation do
+  let(:bike) {double(:bike)}
+
   it { is_expected.to respond_to :release_bike}
+
+  it 'releases a bike if working' do
+    allow(bike).to receive(:working?).and_return(true)
+    subject.dock(bike)
+    expect(subject.release_bike).to be_working
+  end
 
   it { is_expected.to respond_to(:dock).with(1).argument }
 
@@ -34,6 +43,18 @@ describe DockingStation do
       it 'raises an error when full' do
         subject.capacity.times { subject.dock Bike.new } 
         expect { subject.dock Bike.new}.to raise_error 'Docking station full'
+      end
+      
+      it 'accepts broken bikes' do
+        allow(bike).to receive_message_chain(:report_broken,:working) {false}
+        bike.report_broken
+        expect(subject.dock(bike)).to eq [bike]
+      end
+      
+      it 'accepts broken bikes' do
+        allow(bike).to receive_message_chain(:report_broken,:working) {false}
+        bike.report_broken
+        expect(subject.dock(bike)).to eq [bike]
       end
     end
   end 
