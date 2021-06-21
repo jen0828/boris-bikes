@@ -39,6 +39,14 @@ describe DockingStation do
         expect { subject.release_bike }.to raise_error 'No bikes available'
       end
 
+      it 'does not release broken bikes' do
+        allow(bike).to receive_message_chain(:report_broken, :working) {false}
+        bike.report_broken
+        subject.dock(bike)
+        allow(bike).to receive(:working?).and_return(false)
+        expect { subject.release_bike }.to raise_error "No working bikes available"
+      end
+
     describe '#dock' do
       it 'raises an error when full' do
         subject.capacity.times { subject.dock double :bike }
