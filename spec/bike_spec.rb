@@ -1,3 +1,4 @@
+
 require 'bike'
 
 describe Bike do
